@@ -54,10 +54,10 @@ namespace nQuant
             for (int rowIndex = 0; rowIndex < height; rowIndex++)
             {
                 indexesIterator.MoveNext();
-                BitmapData data = this.Image.LockBits(Rectangle.FromLTRB(0, rowIndex, width, rowIndex + 1), ImageLockMode.WriteOnly, PixelFormat.Format8bppIndexed);
+                BitmapData data = this.Image.LockBits(Rectangle.FromLTRB(0, rowIndex, width, rowIndex + 1), ImageLockMode.WriteOnly, this.Image.PixelFormat);
                 try
                 {
-                    Marshal.Copy(indexesIterator.Current, 0, data.Scan0, width);
+                    Marshal.Copy(indexesIterator.Current, 0, data.Scan0, indexesIterator.Current.Length);
                 }
                 finally
                 {

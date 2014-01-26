@@ -12,7 +12,7 @@ namespace nQuant
 
         public Color ToNormalizedColor()
         {
-            return (Sum != 0) ? Color.FromArgb((int)(Alpha /= Sum), (int)(Red /= Sum), (int)(Green /= Sum), (int)(Blue /= Sum)) : Color.Empty;
+            return (Sum != 0) ? Color.FromArgb((int)(Alpha / Sum), (int)(Red / Sum), (int)(Green / Sum), (int)(Blue / Sum)) : Color.Transparent;
         }
 
         public void AddPixel(Pixel pixel)

@@ -11,6 +11,7 @@ namespace nQuant
     {
         private static int alphaTransparency = 10;
         private static int alphaFader = 70;
+        private static int maxColors = 256;
         private static string targetPath = string.Empty;
 
         public static void Main(string[] args)
@@ -35,7 +36,7 @@ namespace nQuant
                 var lastDot = sourcePath.LastIndexOf('.');
                 if (lastDot == -1)
                     lastDot = sourcePath.Length;
-                targetPath = sourcePath.Substring(0, lastDot) + "-quant.png";
+                targetPath = sourcePath.Substring(0, lastDot) + "-quant" + maxColors + ".png";
             }
 
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -44,7 +45,7 @@ namespace nQuant
             {
                 try
                 {
-                    using(var quantized = quantizer.QuantizeImage(bitmap, alphaTransparency, alphaFader))
+                    using (var quantized = quantizer.QuantizeImage(bitmap, alphaTransparency, alphaFader, maxColors))
                     {
                         quantized.Save(targetPath, ImageFormat.Png);
                     }
@@ -86,6 +87,14 @@ namespace nQuant
                             }
                             break;
 
+                        case "M":
+                            if (index >= args.Length - 1 || !Int32.TryParse(args[index + 1], out maxColors))
+                            {
+                                PrintUsage();
+                                Environment.Exit(1);
+                            }
+                            break;
+
                         case "O":
                             if (index >= args.Length - 1)
                             {
@@ -113,7 +122,8 @@ namespace nQuant
             Console.WriteLine("Valid options:");
             Console.WriteLine("  /t : Alpha Thresholds - All colors with an Alpha value equal to or less than this integer will be considered fully transparent. The default is 10.");
             Console.WriteLine("  /f : Alpha Fader - Alpha values will be normalized to the nearest multiple of this value. The default is 70.");
-            Console.WriteLine("  /o : Output image file path. The default is <source image path directory>\\<source image file name without extension>-quant.png");
+            Console.WriteLine("  /m : Max Colors (pixel-depth) - Maximum number of colors for the output format to support. The default is 256 (8-bit).");
+            Console.WriteLine("  /o : Output image file path. The default is <source image path directory>\\<source image file name without extension>-quant<Max colors>.png");
         }
 
     }

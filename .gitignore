@@ -1,18 +1,41 @@
-glob:_*
-glob:bin
-glob:obj
-glob:*.suo
-glob:*.user
-glob:*.cache
-glob:*.dbmdl
-glob:debug
-glob:release
-glob:BuildResults.xml
-glob:*.results.xml
-glob:test-results.html
-glob:.tfs-ignore
-glob:*.orig
-glob:nQuant.Core\Nuget\Tools
-glob:nQuant.Core\Nuget\Lib
-glob:BuildFiles
-glob:packages
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual C++ cache files
+ipch/
+*.aps
+*.ncb
+*.opensdf
+*.sdf
+*.cachefile
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+
+# NuGet Packages Directory
+## TODO: If you have NuGet Package Restore enabled, uncomment the next line
+packages/*
+## TODO: If the tool you use requires repositories.config, also uncomment the next line
+!packages/repositories.config
+# Enable "build/" folder in the NuGet Packages folder since NuGet packages use it for MSBuild targets
+!packages/build/
+
+
+# Others
+*.[Cc]ache
+*.orig
+Backup*/
+node_modules/

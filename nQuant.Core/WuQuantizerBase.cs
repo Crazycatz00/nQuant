@@ -9,29 +9,32 @@ namespace nQuant
 {
     public abstract class WuQuantizerBase
     {
-        private const int MaxColor = 256;
-        protected const byte AlphaColor = 255;
         protected const int Alpha = 3;
         protected const int Red = 2;
         protected const int Green = 1;
         protected const int Blue = 0;
-        private const int SideSize = 33;
-        private const int MaxSideIndex = 32;
+        /// <summary><para>Shift color values right this many bits.</para><para>This reduces the granularity of the color maps produced, making it much faster.</para></summary>
+        /// 3 = value error of 8 (0 and 7 will look the same to it, 0 and 8 different); Takes ~4MB for color tables; ~.25 -> .50 seconds
+        /// 2 = value error of 4; Takes ~64MB for color tables; ~3 seconds
+        /// RAM usage roughly estimated with: ( ( 256 >> SidePixShift ) ^ 4 ) * 60
+        /// Default SidePixShift = 3
+        private const int SidePixShift = 3;
+        private const int MaxSideIndex = 256 / (1 << SidePixShift);
+        private const int SideSize = MaxSideIndex + 1;
 
-        public Image QuantizeImage(Bitmap image)
-        {
-            return QuantizeImage(image, 10, 70);
-        }
+        // The following 2 methods are kept for compatibility.
+        public Image QuantizeImage(Bitmap image) { return QuantizeImage(image, 10, 70, 256); }
+        public Image QuantizeImage(Bitmap image, int alphaThreshold, int alphaFader) { return QuantizeImage(image, alphaThreshold, alphaFader, 256); }
 
-        public Image QuantizeImage(Bitmap image, int alphaThreshold, int alphaFader)
+        public Image QuantizeImage(Bitmap image, int alphaThreshold = 10, int alphaFader = 70, int maxColors = 256)
         {
-            var colorCount = MaxColor;
+            var colorCount = maxColors;
             ImageBuffer buffer = new ImageBuffer(image);
             var moments = BuildHistogram(buffer, alphaThreshold, alphaFader);
             CalculateMoments(moments);
-            var cubes = SplitData(ref colorCount, moments);
+            var cubes = SplitData(ref colorCount, maxColors, moments);
             var lookups = BuildLookups(cubes, moments);
-            return GetQuantizedImage(buffer, colorCount, lookups, alphaThreshold);
+            return GetQuantizedImage(buffer, colorCount, maxColors, lookups, alphaThreshold);
         }
 
         private static ColorMoment[, , ,] BuildHistogram(ImageBuffer sourceImage, int alphaThreshold, int alphaFader)
@@ -54,10 +57,10 @@ namespace nQuant
                         byte pixelGreen = pixel.Green;
                         byte pixelBlue = pixel.Blue;
 
-                        pixelAlpha = (byte)((pixelAlpha >> 3) + 1);
-                        pixelRed = (byte)((pixelRed >> 3) + 1);
-                        pixelGreen = (byte)((pixelGreen >> 3) + 1);
-                        pixelBlue = (byte)((pixelBlue >> 3) + 1);
+                        pixelAlpha = (byte)((pixelAlpha >> SidePixShift) + 1);
+                        pixelRed = (byte)((pixelRed >> SidePixShift) + 1);
+                        pixelGreen = (byte)((pixelGreen >> SidePixShift) + 1);
+                        pixelBlue = (byte)((pixelBlue >> SidePixShift) + 1);
                         moments[pixelAlpha, pixelRed, pixelGreen, pixelBlue].Add(pixel);
                     }
                 }
@@ -313,12 +316,12 @@ namespace nQuant
                     moment[cube.AlphaMinimum, cube.RedMinimum, cube.GreenMinimum, cube.BlueMinimum]);
         }
 
-        private Box[] SplitData(ref int colorCount, ColorMoment[, , ,] moments)
+        private Box[] SplitData(ref int colorCount, int maxColors, ColorMoment[, , ,] moments)
         {
             --colorCount;
             var next = 0;
-            var volumeVariance = new float[MaxColor];
-            var cubes = new Box[MaxColor];
+            var volumeVariance = new float[maxColors];
+            var cubes = new Box[maxColors];
             cubes[0].AlphaMaximum = MaxSideIndex;
             cubes[0].RedMaximum = MaxSideIndex;
             cubes[0].GreenMaximum = MaxSideIndex;
@@ -375,6 +378,6 @@ namespace nQuant
             return lookups;
         }
 
-        internal abstract Image GetQuantizedImage(ImageBuffer image, int colorCount, Pixel[] lookups, int alphaThreshold);
+        internal abstract Image GetQuantizedImage(ImageBuffer image, int colorCount, int maxColors, Pixel[] lookups, int alphaThreshold);
     }
 }
