@@ -1,16 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace nQuant
+﻿namespace nQuant
 {
-    [Serializable]
-    public class QuantizationException : ApplicationException
+    [System.Serializable]
+    public class QuantizationException : System.ApplicationException
     {
-        public QuantizationException(string message) : base(message)
-        {
-
-        }
+        public QuantizationException(string message) : base(message) { }
     }
 }

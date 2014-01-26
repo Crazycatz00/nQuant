@@ -6,7 +6,7 @@ namespace nQuant
 {
     public class WuQuantizer : WuQuantizerBase, IWuQuantizer
     {
-        private IEnumerable<byte[]> indexedPixels(ImageBuffer image, Pixel[] lookups, int alphaThreshold, int maxColors, PaletteColorHistory[] paletteHistogram)
+        private static IEnumerable<byte[]> indexedPixels(ImageBuffer image, Pixel[] lookups, int alphaThreshold, int maxColors, PaletteColorHistory[] paletteHistogram)
         {
             int pixelsCount = image.Image.Width * image.Image.Height;
             var lineIndexes = new byte[(int)System.Math.Ceiling(image.Image.Width / System.Math.Log(256.0, maxColors))];
@@ -60,7 +60,7 @@ namespace nQuant
             return result;
         }
 
-        private ColorPalette BuildPalette(ColorPalette palette, PaletteColorHistory[] paletteHistogram)
+        private static ColorPalette BuildPalette(ColorPalette palette, PaletteColorHistory[] paletteHistogram)
         {
             for (int paletteColorIndex = 0; paletteColorIndex < paletteHistogram.Length; paletteColorIndex++)
             {

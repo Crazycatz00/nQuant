@@ -223,7 +223,7 @@ namespace nQuant
             return new CubeCut(cutPoint, result);
         }
 
-        private bool Cut(ColorMoment[, , ,] moments, ref Box first, ref Box second)
+        private static bool Cut(ColorMoment[, , ,] moments, ref Box first, ref Box second)
         {
             int direction;
             var whole = Volume(first, moments);
@@ -235,7 +235,7 @@ namespace nQuant
             if ((maxAlpha.Value >= maxRed.Value) && (maxAlpha.Value >= maxGreen.Value) && (maxAlpha.Value >= maxBlue.Value))
             {
                 direction = Alpha;
-                if (maxAlpha.Position == null) return false;
+                if (!maxAlpha.Position.HasValue) return false;
             }
             else if ((maxRed.Value >= maxAlpha.Value) && (maxRed.Value >= maxGreen.Value) && (maxRed.Value >= maxBlue.Value))
                 direction = Red;
@@ -255,28 +255,28 @@ namespace nQuant
             switch (direction)
             {
                 case Alpha:
-                    second.AlphaMinimum = first.AlphaMaximum = (byte) maxAlpha.Position;
+                    second.AlphaMinimum = first.AlphaMaximum = maxAlpha.Position.Value;
                     second.RedMinimum = first.RedMinimum;
                     second.GreenMinimum = first.GreenMinimum;
                     second.BlueMinimum = first.BlueMinimum;
                     break;
 
                 case Red:
-                    second.RedMinimum = first.RedMaximum = (byte) maxRed.Position;
+                    second.RedMinimum = first.RedMaximum = maxRed.Position.Value;
                     second.AlphaMinimum = first.AlphaMinimum;
                     second.GreenMinimum = first.GreenMinimum;
                     second.BlueMinimum = first.BlueMinimum;
                     break;
 
                 case Green:
-                    second.GreenMinimum = first.GreenMaximum = (byte) maxGreen.Position;
+                    second.GreenMinimum = first.GreenMaximum = maxGreen.Position.Value;
                     second.AlphaMinimum = first.AlphaMinimum;
                     second.RedMinimum = first.RedMinimum;
                     second.BlueMinimum = first.BlueMinimum;
                     break;
 
                 case Blue:
-                    second.BlueMinimum = first.BlueMaximum = (byte) maxBlue.Position;
+                    second.BlueMinimum = first.BlueMaximum = maxBlue.Position.Value;
                     second.AlphaMinimum = first.AlphaMinimum;
                     second.RedMinimum = first.RedMinimum;
                     second.GreenMinimum = first.GreenMinimum;
@@ -316,7 +316,7 @@ namespace nQuant
                     moment[cube.AlphaMinimum, cube.RedMinimum, cube.GreenMinimum, cube.BlueMinimum]);
         }
 
-        private Box[] SplitData(ref int colorCount, int maxColors, ColorMoment[, , ,] moments)
+        private static Box[] SplitData(ref int colorCount, int maxColors, ColorMoment[, , ,] moments)
         {
             --colorCount;
             var next = 0;
@@ -356,7 +356,7 @@ namespace nQuant
             return cubes.Take(colorCount).ToArray();
         }
 
-        private Pixel[] BuildLookups(Box[] cubes, ColorMoment[, , ,] moments)
+        private static Pixel[] BuildLookups(Box[] cubes, ColorMoment[, , ,] moments)
         {
             Pixel[] lookups = new Pixel[cubes.Length];
 

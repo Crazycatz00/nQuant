@@ -1,6 +1,6 @@
 namespace nQuant
 {
-    internal struct CubeCut
+    struct CubeCut
     {
         public readonly byte? Position;
         public readonly float Value;

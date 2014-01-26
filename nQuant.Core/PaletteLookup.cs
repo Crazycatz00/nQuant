@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace nQuant
 {
@@ -9,7 +8,7 @@ namespace nQuant
     {
         private int mMask;
         private Dictionary<int, LookupNode[]> mLookup;
-        private LookupNode[] Palette { get; set; }
+        private LookupNode[] Palette;
 
         public PaletteLookup(Pixel[] palette)
         {

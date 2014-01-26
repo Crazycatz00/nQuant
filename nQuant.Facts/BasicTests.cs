@@ -29,7 +29,7 @@ namespace nQuant.Facts
                     quantized.Save (testFilePath, ImageFormat.Png);
             }
 
-            Debug.WriteLine("nQuant: {0} ms/image", sw.ElapsedMilliseconds);
+            Debug.WriteLine(string.Format("nQuant: {0} ms/image", sw.ElapsedMilliseconds));
             Assert.True(File.Exists(testFilePath));
             var fileLength = new FileInfo(testFilePath).Length;
             Assert.True(fileLength > 0);

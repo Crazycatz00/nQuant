@@ -2,7 +2,7 @@ using System.Runtime.InteropServices;
 namespace nQuant
 {
     [StructLayout(LayoutKind.Explicit)]
-    public struct Pixel
+    struct Pixel
     {
         public Pixel(byte alpha, byte red, byte green, byte blue)
             : this()
