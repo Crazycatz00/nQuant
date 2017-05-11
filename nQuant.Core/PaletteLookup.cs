@@ -121,7 +121,7 @@ namespace nQuant
             byte alphaMask = ComputeBitMask(maxAlpha, Convert.ToInt32(Math.Round(uniqueAlphas / totalUniques * AvailableBits)));
             byte redMask = ComputeBitMask(maxRed, Convert.ToInt32(Math.Round(uniqueReds / totalUniques * AvailableBits)));
             byte greenMask = ComputeBitMask(maxGreen, Convert.ToInt32(Math.Round(uniqueGreens / totalUniques * AvailableBits)));
-            byte blueMask = ComputeBitMask(maxAlpha, Convert.ToInt32(Math.Round(uniqueBlues / totalUniques * AvailableBits)));
+            byte blueMask = ComputeBitMask(maxBlue, Convert.ToInt32(Math.Round(uniqueBlues / totalUniques * AvailableBits)));
 
             Pixel maskedPixel = new Pixel(alphaMask, redMask, greenMask, blueMask);
             return maskedPixel.Argb;
