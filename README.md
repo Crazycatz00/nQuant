@@ -9,10 +9,14 @@ The original repository may be found here: https://nquant.codeplex.com/
 This fork was forked from Philippecp's [nQuantLeanerAndFaster](https://nquant.codeplex.com/SourceControl/network/forks/Philippecp/nQuantLeanerAndFaster) fork.
 
 ## This Fork
-This fork was made to support creating 4-bit images, as the original only supports creating 8-bit images.
+
+This fork is based to [Crazycat00's fork](https://github.com/Crazycatz00/nQuant/), which adds support to create 4-bit images, as the original only supports creating 8-bit images.
 The public interface is kept completely compatible with the original, so the same code will do the same thing.
 
+In addition, OpenKH fork ditches support for .NET Framework prior to 4.6.1 version, by using .NET Standard 2.0 instead. This adds support for all the future releases of .NET Framework 4.6.1, .NET Core 2.0, Mono, Xamarin.
+
 ## Usage
+
 Usage is the same as the standard nQuant library, with the only exception being a new optional parameter on `WuQuantizer.QuantizeImage`. It's modified to:
 ```csharp
 Image QuantizeImage(Bitmap image, int alphaThreshold = 10, int alphaFader = 70, int maxColors = 256);
@@ -27,7 +31,9 @@ Image QuantizeImage(Bitmap image, int alphaThreshold = 10, int alphaFader = 70, 
   * 2: Return a 1-bit image containing 2 colors. (Note that the last color is transparent, so each pixel will either be fully transparent or not.)
 
 ## Changes
+
 See [CHANGES.md](CHANGES.md) for a list of major changes.
 
 ## License
+
 nQuant is issued under the Apache 2.0 license. See [LICENSE.md](LICENSE.md) for details.
